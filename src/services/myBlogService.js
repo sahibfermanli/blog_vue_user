@@ -1,7 +1,7 @@
 import api from './api'
 import {ElNotification} from "element-plus";
 
-const ENDPOINT = '/blogs/'
+const ENDPOINT = '/my-blogs/'
 
 export default {
   load (search, page = null, limit = null) {

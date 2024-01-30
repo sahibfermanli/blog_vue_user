@@ -127,7 +127,7 @@
 import { onMounted, ref, reactive } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
-import blogService from '@/services/blogService'
+import blogService from '@/services/myBlogService'
 import { Edit, Delete } from '@element-plus/icons'
 import usePagination from '@/composables/common/usePagination'
 
