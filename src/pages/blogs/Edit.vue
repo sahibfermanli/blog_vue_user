@@ -114,7 +114,6 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import BaseInput from '@/components/base/BaseInput.vue'
-import BaseSelect from '@/components/base/BaseSelect.vue'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 import blogService from '@/services/myBlogService'

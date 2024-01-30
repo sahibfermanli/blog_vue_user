@@ -1,18 +1,16 @@
 <template>
   <div class="container-fluid">
     <div class="card card-custom">
+      <div class="card-body">
+        <div class="row align-items-end">
+          <h1>Welcome, {{ $store.getters['auth/GET_USER']?.name }} {{ $store.getters['auth/GET_USER']?.surname }}!</h1>
+        </div>
+      </div>
       <div class="card-header">
         <div class="card-title">
           <h3 class="card-label">
             Blogs
           </h3>
-          <el-button
-              v-loading="loading"
-              type="success"
-              @click="$router.push({name: 'blogs_create'})"
-          >
-            New
-          </el-button>
         </div>
       </div>
       <div class="card-body">
@@ -82,44 +80,26 @@
               label="Description"
           />
           <el-table-column
-              prop="is_active"
-              label="Status"
-          >
-            <template #default="scope">
-              <span :style="{color: scope.row.is_active ? 'green' : 'orange'}">{{ scope.row.is_active ? 'Accepted' : 'Pending' }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column
               prop="created_date"
               label="Date"
           />
           <el-table-column
-              label="Operations"
-              width="140"
+              prop="created_by"
+              label="User"
+          />
+          <el-table-column
+              label="More"
+              width="70"
               class-name="actions"
           >
             <template #default="scope">
               <div style="display: flex; gap: 2px;">
                 <el-button
                     size="small"
-                    :icon="Edit"
+                    :icon="More"
                     type="primary"
-                    @click="$router.push({name: 'blogs_edit', params: {id: scope.row.id}})"
+                    @click="$router.push({name: 'blog_show', params: {id: scope.row.id}})"
                 />
-                <el-popconfirm
-                    cancel-button-text="Cancel"
-                    confirm-button-text="Yes"
-                    title="Are you sure you want to delete?"
-                    @confirm="deleteRow(scope.row.id)"
-                >
-                  <template #reference>
-                    <el-button
-                        size="small"
-                        :icon="Delete"
-                        type="danger"
-                    />
-                  </template>
-                </el-popconfirm>
               </div>
             </template>
           </el-table-column>
@@ -140,12 +120,13 @@
 </template>
 
 <script setup>
-import { onMounted, ref, reactive } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
-import blogService from '@/services/myBlogService'
-import { Edit, Delete } from '@element-plus/icons'
+import { onMounted, reactive, ref } from 'vue'
+import internalUserService from '@/services/internal-users/internalUserService'
+import { More } from '@element-plus/icons'
 import usePagination from '@/composables/common/usePagination'
+import blogService from '@/services/blogService'
 
 const route = useRoute()
 const store = useStore()
@@ -177,30 +158,10 @@ const search = async () => {
   }
 }
 
-const onCurrentPageUpdated = async (page) => {
-  currentPage.value = page
-
-  await search()
-}
-
-const deleteRow = async (id) => {
-  if (loading.value) return false
-
-  try {
-    loading.value = true
-
-    await blogService.delete(id)
-    allBlogs.value = allBlogs.value.filter(row => row.id !== id)
-  } catch (e) {
-
-  } finally {
-    loading.value = false
-  }
-}
-
 onMounted(async () => {
   try {
     loading.value = true
+    await internalUserService.checkLoggedIn()
 
     await search()
   } catch (e) {

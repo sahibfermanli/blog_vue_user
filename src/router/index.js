@@ -14,7 +14,12 @@ const routes = [
   {
     path: '/',
     name: 'dashboard' ,
-    component: () => import('@/pages/Index.vue'),
+    component: () => import('@/pages/home/Index.vue'),
+  },
+  {
+    path: '/blog/:id',
+    name: 'blog_show' ,
+    component: () => import('@/pages/home/ShowBlog.vue'),
   },
 
   // profile (auth)
