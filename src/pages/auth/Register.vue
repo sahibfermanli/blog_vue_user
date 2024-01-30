@@ -24,13 +24,13 @@
         <div class="login-signin">
           <div class="mb-20">
             <h3 class="opacity-40 font-weight-normal">
-              Login
+              Register
             </h3>
             <h4 class="opacity-40">
               <router-link
-                  :to="{name: 'register'}"
+                  :to="{name: 'auth'}"
               >
-                <a href="#">Register</a>
+                <a href="#">Login</a>
               </router-link>
             </h4>
             <div class="mb-6 text-center" />
@@ -38,8 +38,30 @@
           <form
             id="kt_login_signin_form"
             class="form"
-            @submit.prevent="login()"
+            @submit.prevent="register()"
           >
+            <div class="form-group">
+              <input
+                  v-model="data.form.name"
+                  class="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
+                  type="text"
+                  placeholder="Name"
+                  name="name"
+                  autocomplete="off"
+                  :class="{'is-invalid': data.errors.name}"
+              >
+            </div>
+            <div class="form-group">
+              <input
+                  v-model="data.form.surname"
+                  class="form-control h-auto text-white bg-white-o-5 rounded-pill border-0 py-4 px-8"
+                  type="text"
+                  placeholder="Surname"
+                  name="surname"
+                  autocomplete="off"
+                  :class="{'is-invalid': data.errors.surname}"
+              >
+            </div>
             <div class="form-group">
               <input
                 v-model="data.form.email"
@@ -68,7 +90,7 @@
                 class="btn btn-pill btn-primary opacity-90 px-15 py-3"
                 :class="{'spinner spinner-darker-white spinner-left disabled': data.isLoading}"
               >
-                Login
+                Register
               </button>
             </div>
           </form>
@@ -103,13 +125,13 @@ onMounted(async () => {
   }
 })
 
-const login = async () => {
+const register = async () => {
   if (data.isLoading) {
     return
   }
   data.isLoading = true
 
-  await store.dispatch('auth/LOGIN', data.form)
+  await store.dispatch('auth/REGISTER', data.form)
   data.isLoading = false
 }
 

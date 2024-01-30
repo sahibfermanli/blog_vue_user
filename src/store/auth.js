@@ -44,7 +44,6 @@ const mutations = {
 }
 
 const actions = {
-
   async LOGIN ({ commit, state, dispatch }, payload) {
     payload['device_type'] = 'web'
     const user = {
@@ -54,6 +53,24 @@ const actions = {
     }
     await api.get(import.meta.env.VITE_HOST_URL + '/sanctum/csrf-cookie')
     await api.post(import.meta.env.VITE_API_URL + '/login', payload)
+      .then(async ({ data }) => {
+        localStorage.setItem('token', data.token)
+        commit('SET_USER', Object.assign(user, data.data))
+        window.location.href = '/'
+      }).catch(e => {
+        console.log(e)
+      })
+  },
+
+  async REGISTER ({ commit, state, dispatch }, payload) {
+    payload['device_type'] = 'web'
+    const user = {
+      'name': '',
+      'surname': '',
+      'email': '',
+    }
+    await api.get(import.meta.env.VITE_HOST_URL + '/sanctum/csrf-cookie')
+    await api.post(import.meta.env.VITE_API_URL + '/register', payload)
       .then(async ({ data }) => {
         localStorage.setItem('token', data.token)
         commit('SET_USER', Object.assign(user, data.data))

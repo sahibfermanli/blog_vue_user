@@ -2,6 +2,11 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   {
+    path: '/register',
+    name: 'register',
+    component: () => import('@/pages/auth/Register.vue'),
+  },
+  {
     path: '/login',
     name: 'auth',
     component: () => import('@/pages/auth/Login.vue'),
