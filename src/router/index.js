@@ -23,6 +23,24 @@ const routes = [
     name: 'change_password',
     component: () => import('../pages/auth/ChangePassword.vue'),
   },
+
+  // blogs
+  {
+    path: '/blogs',
+    name: 'blogs',
+    component: () => import('@/pages/blogs/Index.vue'),
+    alias: ['/'],
+  },
+  {
+    path: '/blogs/create',
+    name: 'blogs_create',
+    component: () => import('../pages/blogs/Create.vue'),
+  },
+  {
+    path: '/blogs/:id',
+    name: 'blogs_edit',
+    component: () => import('../pages/blogs/Edit.vue'),
+  },
 ]
 
 const router = createRouter({
