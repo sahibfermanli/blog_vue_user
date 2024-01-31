@@ -3,6 +3,7 @@ import api from '../services/api'
 const state = () => ({
   authorized: !!localStorage.getItem('user') || false,
   user: JSON.parse(localStorage.getItem('user')) || {
+    'id': '',
     'name': '',
     'surname': '',
     'email': '',
@@ -47,6 +48,7 @@ const actions = {
   async LOGIN ({ commit, state, dispatch }, payload) {
     payload['device_type'] = 'web'
     const user = {
+      'id': '',
       'name': '',
       'surname': '',
       'email': '',
@@ -65,6 +67,7 @@ const actions = {
   async REGISTER ({ commit, state, dispatch }, payload) {
     payload['device_type'] = 'web'
     const user = {
+      'id': '',
       'name': '',
       'surname': '',
       'email': '',

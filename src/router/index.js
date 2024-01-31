@@ -46,6 +46,24 @@ const routes = [
     name: 'blogs_edit',
     component: () => import('../pages/blogs/Edit.vue'),
   },
+
+  // chats
+  {
+    path: '/chats',
+    name: 'chats',
+    component: () => import('@/pages/chats/Index.vue'),
+    alias: ['/'],
+  },
+  {
+    path: '/chats/:id/messages',
+    name: 'chat_messages' ,
+    component: () => import('@/pages/chats/Messages.vue'),
+  },
+  {
+    path: '/chats/new/:userId',
+    name: 'start_new_chat',
+    component: () => import('../pages/chats/StartNewChat.vue'),
+  },
 ]
 
 const router = createRouter({
