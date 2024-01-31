@@ -5,7 +5,7 @@
         <div class="card-title">
           <span class="card-icon" />
           <h3 class="card-label">
-            Edit
+            Show blog
           </h3>
         </div>
       </div>
@@ -28,7 +28,6 @@
                 v-model="input_data.created_by"
                 label="User"
                 max-length="255"
-                :required="true"
                 colspan-class="col-lg-6"
                 disabled
             />
@@ -36,7 +35,6 @@
                 v-model="input_data.created_date"
                 label="Date"
                 max-length="255"
-                :required="true"
                 colspan-class="col-lg-6"
                 disabled
             />
@@ -46,7 +44,6 @@
                 v-model="input_data.title"
                 label="Title"
                 max-length="255"
-                :required="true"
                 colspan-class="col-lg-12"
                 disabled
             />
@@ -56,18 +53,67 @@
                 v-model="input_data.description"
                 label="Description"
                 max-length="500"
-                :required="true"
                 colspan-class="col-lg-12"
                 disabled
             />
             <BaseTextarea
                 v-model="input_data.body"
                 label="Body"
-                :required="true"
                 colspan-class="col-lg-12"
                 disabled
             />
           </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="d-block mb-20">
+          <div class="row">
+            <BaseTextarea
+                v-model="comment_data.body"
+                label="Comment"
+                :required="true"
+                colspan-class="col-lg-12"
+            />
+          </div>
+          <div class="float-right mt-5">
+            <el-button
+                v-loading="loading"
+                type="primary"
+                @click="addComment()"
+            >
+              Add comment
+            </el-button>
+            <el-button
+                v-loading="loading"
+                type="warning"
+                @click="clearCommentData()"
+            >
+              Clear
+            </el-button>
+          </div>
+        </div>
+        <div class="row">
+          <el-table
+              ref="multipleTable"
+              v-loading="loading"
+              :data="allComments"
+              max-height="70vh"
+              border
+              :empty-text="'No comments!'"
+          >
+            <el-table-column
+                prop="body"
+                label="Text"
+            />
+            <el-table-column
+                prop="created_by"
+                label="User"
+            />
+            <el-table-column
+                prop="created_date"
+                label="Date"
+            />
+          </el-table>
         </div>
       </div>
     </div>
@@ -87,6 +133,7 @@ const store = useStore()
 const router = useRouter()
 
 let loading = ref(false)
+let allComments = ref([])
 
 const id = route.params.id
 
@@ -100,12 +147,48 @@ let input_data = ref({
   created_date: '',
 })
 
+let comment_data = ref({
+  body: '',
+})
+
+let comment_data_clear = ref({
+  body: '',
+})
+
+function clearCommentData () {
+  loading.value = false
+
+  Object.assign(comment_data.value, comment_data_clear.value)
+}
+
+const addComment = async () => {
+  if (loading.value) return false
+
+  loading.value = true
+
+  try {
+    const {
+      data: {
+        data: commentsData,
+      }
+    } = await blogService.addComment(id, comment_data.value)
+    allComments.value = commentsData
+
+    clearCommentData()
+  } catch (e) {
+
+  } finally {
+    loading.value = false
+  }
+}
+
 onMounted(async () => {
   try {
     loading.value = true
     const { data: { data: blogData } } = await blogService.show(id)
     input_data.value = blogData
     currentImages.value = blogData.images
+    allComments.value = blogData.comments
   } catch (e) {
 
   } finally {

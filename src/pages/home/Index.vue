@@ -50,6 +50,39 @@
             :empty-text="'No data!'"
         >
           <el-table-column
+              type="expand"
+              width="30"
+              fixed
+          >
+            <template #default="props">
+              <div m="4">
+                <h3 style="margin-left: 10px;">
+                  Comments:
+                </h3>
+                <el-table
+                    :data="props.row.comments"
+                    :empty-text="'No comment!'"
+                    :header-cell-style="{ background: '#d9cfcf' }"
+                    :cell-style="{ background: '#ece6e6' }"
+                >
+                  <el-table-column
+                      label="Comment"
+                      prop="body"
+                  />
+                  <el-table-column
+                      label="User"
+                      prop="created_by"
+                  />
+                  <el-table-column
+                      label="Date"
+                      prop="created_date"
+                  />
+                </el-table>
+              </div>
+            </template>
+          </el-table-column>
+
+          <el-table-column
               prop="id"
               label="#"
               width="100"
@@ -78,6 +111,10 @@
           <el-table-column
               prop="description"
               label="Description"
+          />
+          <el-table-column
+              prop="comments_count"
+              label="Comments"
           />
           <el-table-column
               prop="created_date"
