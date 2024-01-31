@@ -175,6 +175,12 @@ const { pagination, setPagination, currentPage, perPage, perPageCounts } = usePa
 let loading = ref(false)
 let allBlogs = ref([])
 
+const onCurrentPageUpdated = async (page) => {
+  currentPage.value = page
+
+  await search()
+}
+
 const search = async () => {
   try {
     loading.value = true
